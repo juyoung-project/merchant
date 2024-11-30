@@ -1,9 +1,8 @@
 package com.kjy.merchant.entity;
 
+import com.kjy.merchant.common.Role;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -11,11 +10,13 @@ import java.time.LocalDateTime;
 @Table(name = "member")
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Member {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // PostgreSQL IDENTITY 사용
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 자동 증가 ID
 
     @Column(name = "username", nullable = false, length = 50)
@@ -30,12 +31,14 @@ public class Member {
     @Column(name = "contact_number", length = 15)
     private String contactNumber; // 연락처 (옵션)
 
-    @Column(name = "role", nullable = false, length = 20)
-    private String role; // 역할 (OWNER, STAFF)
+    @Enumerated(EnumType.STRING )
+    private Role role;
 
+    @Builder.Default
     @Column(name = "status", nullable = false, length = 20)
     private String status = "ACTIVE"; // 상태 (기본값: ACTIVE)
 
+    @Builder.Default
     @Column(name = "create_time", nullable = false, updatable = false)
     private LocalDateTime createTime = LocalDateTime.now(); // 생성 시간
 
@@ -48,6 +51,7 @@ public class Member {
     @Column(name = "update_member_id")
     private Long updateMemberId; // 수정자 ID
 
+    @Builder.Default
     @Column(name = "del_yn", nullable = false, length = 1)
     private String delYn = "N"; // 삭제 여부 (기본값: N)
 }

@@ -8,18 +8,20 @@ import lombok.Setter;
 @Setter
 public class BizException extends RuntimeException {
 
-    private static final long serialVersionUID = 1L;
 
     private Code code;
     private String customErrorMsg;
 
 
-    BizException( Code code ) {
+    public BizException( Code code ) {
         super(code.getResMsg());
+        this.code = code;
     }
 
-    BizException(String customErrorMsg) {
+    public BizException(Code code,  String customErrorMsg) {
         super(customErrorMsg);
+        this.code = code;
+        this.customErrorMsg = customErrorMsg;
     }
 
 }

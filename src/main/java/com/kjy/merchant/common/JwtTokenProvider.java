@@ -5,14 +5,12 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 @Component
 public class JwtTokenProvider {
@@ -40,14 +38,13 @@ public class JwtTokenProvider {
 		
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("role", role);
-		String token = Jwts.builder()
-	                		.setClaims(claims)
-			                .setSubject(email)
-			                .setIssuedAt(new Date())
-			                .setExpiration(new Date(System.currentTimeMillis() + expiration))
-			                .signWith(SignatureAlgorithm.HS512, secretKey)
-			                .compact();
-		return token;
+        return Jwts.builder()
+                            .setClaims(claims)
+                            .setSubject(email)
+                            .setIssuedAt(new Date())
+                            .setExpiration(new Date(System.currentTimeMillis() + expiration))
+                            .signWith(SignatureAlgorithm.HS512, secretKey)
+                            .compact();
 	}
     
 	 // JWT 토큰에서 사용자 정보 추출
