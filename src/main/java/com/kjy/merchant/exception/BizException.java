@@ -17,9 +17,13 @@ public class BizException extends RuntimeException {
         super(code.getResMsg());
         this.code = code;
     }
-
     public BizException(Code code,  String customErrorMsg) {
         super(customErrorMsg);
+        this.code = code;
+        this.customErrorMsg = customErrorMsg;
+    }
+    public BizException(Code code,  String customErrorMsg, Throwable cause) {
+        super(customErrorMsg, cause);
         this.code = code;
         this.customErrorMsg = customErrorMsg;
     }

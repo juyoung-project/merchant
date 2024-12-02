@@ -39,7 +39,6 @@ public class LoginController {
         UsernamePasswordAuthenticationToken authenticationToken =  new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
         try {
             authenticationManager.authenticate(authenticationToken);
-            System.out.println("중간에먼저 확인하기");
             Member mem = userService.getMemberByEmail(dto.getEmail());
             String jwtToken = jwtTokenProvider.generateToken( mem.getEmail(), mem.getRole());
             String refreshToken = jwtTokenProvider.generateRefreshToken(mem.getEmail(), mem.getRole());
@@ -48,7 +47,7 @@ public class LoginController {
             CookieUtils.addJwtTokenCookie(response, jwtToken);
 
         } catch (Exception e) {
-            throw new BizException(Code.ERROR, "정보가 올바르지 않습니다.");
+            throw new BizException(Code.ERROR, "정보가 올바르지 않습니다.", e);
         }
         return ResponsePojo.success(null, "로그인 성공");
     }

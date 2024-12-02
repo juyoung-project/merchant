@@ -31,7 +31,7 @@ public class UserService {
         try {
             memberRepository.save(member);
         } catch (Exception e) {
-            throw new BizException(Code.ERROR, "계정생성중 오류가 발생했어요");
+            throw new BizException(Code.ERROR, "계정생성중 오류가 발생했어요", e);
         }
     }
 

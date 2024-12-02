@@ -38,6 +38,7 @@ public class JwtTokenProvider {
 		
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("role", role);
+		claims.put("type", type);
         return Jwts.builder()
                             .setClaims(claims)
                             .setSubject(email)
@@ -66,9 +67,9 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰 유효성 검증
-	public boolean validateToken(String token, String tokenType) {
+	public boolean validateToken(String token) {
 		try {
-			Jwts.parser().setSigningKey(secretKey).parseClaimsJws(tokenType+token);
+			Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
 			return true;
 		} catch (SignatureException e) {
 			System.out.println("Invalid JWT signature: " + e.getMessage());

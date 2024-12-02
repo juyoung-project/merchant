@@ -13,7 +13,7 @@
       </form>
       <div class="additional-links">
         <a href="#">비밀번호를 잊으셨나요?</a>
-        <a href="#">회원가입</a>
+        <a href="#" @click="goSignUp">회원가입</a>
       </div>
     </div>
   </div>
@@ -33,16 +33,25 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await axios.post('/api/sign-in', {
+        await axios.post('/api/sign-in', {
           email: this.email,
           password: this.password,
         });
-        localStorage.setItem('token', response.data.token);
-        this.$router.push('/main');
+
+        if ( this.$roleUtils.isAdmin()) {
+          this.$router.push('/main');
+        } else {
+          alert("일치하지 않음")
+        }
+       
       } catch (error) {
+        console.log(error)
         alert('로그인 실패!');
       }
     },
+    goSignUp() {
+      this.$router.push('/sign-up');
+    }
   },
 };
 </script>

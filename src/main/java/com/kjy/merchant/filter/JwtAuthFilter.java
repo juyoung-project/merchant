@@ -25,9 +25,6 @@ import java.util.Arrays;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 	
-	private final String TOKEN_PREFIX = "JWT-TOKEN:";
-	private final String REFRESH_TOKEN_PREFIX = "RE-JWT-TOKEN:";
-	
 	private static final String JWT_COOKIE = "JWT-TOKEN";
 	private static final String JWT_REFRESH_COOKIE = "RE-JWT-TOKEN";
 	
@@ -49,12 +46,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	        return;
 	    }
 
-	    if (isValidToken(token, TOKEN_PREFIX)) {
+	    if (isValidToken(token)) {
 	        authenticateUser(token, request);
 	    } else {
 	        token = CookieUtils.getJwtFromRequest(request, JWT_REFRESH_COOKIE);
-	        System.out.println("restone:: > " + token);
-	        if (isValidToken(token, REFRESH_TOKEN_PREFIX)) {
+
+	        if (isValidToken(token)) {
 	            authenticateUser(token, request);
 	            setCookieInToken(response, token);
 	        } else {
@@ -70,8 +67,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	                 .anyMatch(str -> str.contains(requestURI));
 	}
 
-	private boolean isValidToken(String token, String tokenType) {
-	    return token != null && jwtTokenProvider.validateToken(token, tokenType);
+	private boolean isValidToken(String token) {
+	    return token != null && jwtTokenProvider.validateToken(token);
 	}
 
 	private void authenticateUser(String token, HttpServletRequest request) {
@@ -85,8 +82,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 	private void setCookieInToken(HttpServletResponse response, String token) {
 	    String email = jwtTokenProvider.getEmailFromToken(token);
-	    CookieUtils.addJwtRefreshTokenCookie(response, jwtTokenProvider.generateRefreshToken(email, Role.STAFF));
-	    CookieUtils.addJwtTokenCookie(response, jwtTokenProvider.generateToken(email, Role.STAFF));
+		Role role = jwtTokenProvider.getRoleFromToken(token);
+	    CookieUtils.addJwtRefreshTokenCookie(response, jwtTokenProvider.generateRefreshToken(email, role));
+	    CookieUtils.addJwtTokenCookie(response, jwtTokenProvider.generateToken(email, role));
 	}
 
 

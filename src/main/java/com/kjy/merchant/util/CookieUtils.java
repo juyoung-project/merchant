@@ -9,8 +9,8 @@ public class CookieUtils {
 	
 	private static final int EXPIRATION = 600;
 	private static final int REFRESH_EXPIRATION = 7 * 24 * 60 * 60 ;
-	private static final String JWT_COOKIE = "JWT-TOKEN";
-	private static final String JWT_REFRESH_COOKIE = "RE-JWT-TOKEN";
+	public static final String JWT_COOKIE = "JWT-TOKEN";
+	public static final String JWT_REFRESH_COOKIE = "RE-JWT-TOKEN";
 	
 	
 	private CookieUtils() {}
@@ -26,8 +26,7 @@ public class CookieUtils {
 	private static void _addCookie(HttpServletResponse response, String token, String cookieType, int expiration) {
 		Cookie cookie = new Cookie(cookieType, token);
 		cookie.setMaxAge(expiration);
-	    cookie.setHttpOnly(true);
-	    cookie.setSecure(true); 
+	    cookie.setSecure(true);
 	    cookie.setPath("/");      
 	    response.addCookie(cookie);
 	}
