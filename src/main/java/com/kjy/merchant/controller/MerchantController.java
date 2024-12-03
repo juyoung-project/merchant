@@ -20,4 +20,21 @@ public class MerchantController {
         return ResponsePojo.success(null,"생성완료");
     }
 
+    @PostMapping(value = "/api/read-merchant")
+    public ResponsePojo readMerchant(@RequestBody MerchantDto dto) {
+        return ResponsePojo.success( merchantService.readMerchant(dto),"가맹점리스트를 정상적으로 불러왔습니다.");
+    }
+
+    @PostMapping(value = "/api/update-merchant")
+    public ResponsePojo updateMerchant(@RequestBody MerchantDto dto) {
+        merchantService.updateMerchant(dto);
+        return ResponsePojo.success(null ,"가맹점 업데이트 정상적으로 실행되었습니다.");
+    }
+
+    @PostMapping(value = "/api/delete-merchant")
+    public ResponsePojo deleteMerchant(@RequestBody MerchantDto dto) {
+        merchantService.deleteMerchant(dto);
+        return ResponsePojo.success( null,"가맹점이 삭제되었습니다.");
+    }
+
 }

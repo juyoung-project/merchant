@@ -93,6 +93,9 @@ export default {
       ],
     };
   },
+  created() {
+    this.readMerchant()
+  },
   computed: {
     availableDistricts() {
       return this.districts[this.filters.city] || [];
@@ -119,18 +122,20 @@ export default {
     async createMerchant() {
       let data ={
         "address": "123 Main Street, Business District",
-        "contactNumber": "010-1234-5678",
+        "contactNumber": "010-2234-5678",
         "addressGu": "Gangnam",
         "addressSi": "Seoul",
-        "name" :"테스트가맹점",
+        "name" :"테스트가맹점2",
         "owner": "John Doe",
-        "businessNumber": "123-45-67890",
-        "contractEndDate": "2025-12-31",
-        "openDate": "2024-01-01"
+        "businessNumber": "1123-45-67890",
+        "contractEndDate": "2027-12-31",
+        "openDate": "2024-02-01"
       }
 
       await axios.post('/api/create-merchant', data);
-
+    },
+    async readMerchant() {
+      await axios.post('/api/read-merchant', {});
     }
   },
 };
