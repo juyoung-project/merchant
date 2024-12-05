@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 
 export default {
   name: "SignUpPage",
@@ -40,7 +39,7 @@ export default {
   methods: {
     async signup() {
       try {
-        await axios.post('/api/sign-up', {
+        await this.$sendRequest('POST','/api/sign-up', {
           email: this.email,
           username: this.name,
           password: this.password,

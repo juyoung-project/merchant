@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 
 export default {
   name: "LoginPage",
@@ -33,10 +32,7 @@ export default {
   methods: {
     async login() {
       try {
-        await axios.post('/api/sign-in', {
-          email: this.email,
-          password: this.password,
-        });
+        await this.$sendRequest('POST','/api/sign-in', {email: this.email, password: this.password, });
 
         if ( this.$roleUtils.isAdmin()) {
           this.$router.push('/main');

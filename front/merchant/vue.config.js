@@ -8,11 +8,5 @@ module.exports = defineConfig({
     headers: {
       'Access-Control-Allow-Origin': '*', // CORS 설정 (필요한 경우)
     },
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8080',
-        changeOrigin: true,
-      },
-    },
   },
 });
