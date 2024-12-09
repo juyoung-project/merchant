@@ -11,7 +11,7 @@ public interface MerchantRepository extends JpaRepository<Merchant, Long> {
 
     Optional< Merchant > findById(long id);
 
-    @Query("SELECT m FROM Merchant m WHERE m.createMemberId = :id AND m.delYn = 'N'")
+    @Query(value =  "SELECT m FROM Merchant m WHERE m.createMemberId = :id AND m.delYn = 'N'")
     List<Merchant> findByCreateMemberId(Long id);
 
 }

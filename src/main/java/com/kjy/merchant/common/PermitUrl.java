@@ -5,7 +5,7 @@ import java.util.List;
 
 public enum PermitUrl {
 
-    PermitUrlList(Arrays.asList("/", "/api/health-check", "/api/sign-in", "/error", "/favicon.ico", "/api/sign-up", "/login",  "/sign-up-page"));
+    PermitUrlList(Arrays.asList("/","/admin", "/api/create-tenant", "/api/read-tenant", "/api/health-check", "/api/sign-in", "/error", "/favicon.ico", "/api/sign-up", "/login",  "/sign-up-page"));
 
     private List<String> permitUrlList;
 
