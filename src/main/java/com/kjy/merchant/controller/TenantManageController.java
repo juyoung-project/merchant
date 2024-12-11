@@ -25,4 +25,16 @@ public class TenantManageController {
     public ResponsePojo readTenant(@RequestBody TenantDto dto) {
         return ResponsePojo.success(tenantManageService.readTenant(),"리스트 호출완료");
     }
+
+    @PostMapping(value = "/api/deactivate-tenant")
+    public ResponsePojo deactivateTenant(@RequestBody TenantDto dto) {
+        tenantManageService.deactivateTenant(dto);
+        return ResponsePojo.success(null,"리스트 호출완료");
+    }
+
+    @PostMapping(value = "/api/copy-tenant-with-data")
+    public ResponsePojo copyTenantWithData(@RequestBody TenantDto dto) {
+        tenantManageService.copyTenantWithData(dto);
+        return ResponsePojo.success(null,"리스트 호출완료");
+    }
 }

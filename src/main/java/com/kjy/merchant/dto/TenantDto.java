@@ -11,4 +11,6 @@ import lombok.ToString;
 public class TenantDto {
     private String tenantName;
     private String status;
+    private String targetTenant;
+    private String sourceTenant;
 }
