@@ -8,6 +8,7 @@ import com.kjy.merchant.entity.Member;
 import com.kjy.merchant.exception.BizException;
 import com.kjy.merchant.service.UserService;
 import com.kjy.merchant.util.CookieUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,6 +16,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 public class LoginController {
@@ -35,20 +39,21 @@ public class LoginController {
     }
 
     @PostMapping(value = "/api/sign-in")
-    public ResponsePojo signIn(@RequestBody MemberDto dto, HttpServletResponse response ) {
+    public ResponsePojo signIn(@RequestBody MemberDto dto, HttpServletRequest request, HttpServletResponse response ) {
         UsernamePasswordAuthenticationToken authenticationToken =  new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
+        Map<String, String> tokenMap = new HashMap<String, String>();
         try {
             authenticationManager.authenticate(authenticationToken);
             Member mem = userService.getMemberByEmail(dto.getEmail());
             String jwtToken = jwtTokenProvider.generateToken( mem.getEmail(), mem.getRole());
             String refreshToken = jwtTokenProvider.generateRefreshToken(mem.getEmail(), mem.getRole());
 
-            CookieUtils.addJwtRefreshTokenCookie(response, refreshToken);
-            CookieUtils.addJwtTokenCookie(response, jwtToken);
+            tokenMap.put("jwtToken", jwtToken);
+            tokenMap.put("reJwtToken", refreshToken);
 
         } catch (Exception e) {
             throw new BizException(Code.ERROR, "정보가 올바르지 않습니다.", e);
         }
-        return ResponsePojo.success(null, "로그인 성공");
+        return ResponsePojo.success(tokenMap, "로그인 성공");
     }
 }

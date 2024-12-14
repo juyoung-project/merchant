@@ -1,12 +1,14 @@
 package com.kjy.merchant.common;
 
 
+import com.kjy.merchant.util.RequestUtils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -39,6 +41,7 @@ public class JwtTokenProvider {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("role", role);
 		claims.put("type", type);
+		claims.put("domain", RequestUtils.getDomain());
         return Jwts.builder()
                             .setClaims(claims)
                             .setSubject(email)

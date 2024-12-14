@@ -32,13 +32,11 @@ export default {
   methods: {
     async login() {
       try {
-        await this.$sendRequest('POST','/api/sign-in', {email: this.email, password: this.password, });
-
-        if ( this.$roleUtils.isAdmin()) {
-          this.$router.push('/main');
-        } else {
-          alert("일치하지 않음")
-        }
+        const response = await this.$sendRequest('POST','/api/sign-in', {email: this.email, password: this.password, });
+        localStorage.setItem("JWT-TOKEN", response.data.jwtToken)
+        localStorage.setItem("RE-JWT-TOKEN", response.data.reJwtToken)
+        this.$router.push('/main');
+    
        
       } catch (error) {
         console.log(error)
