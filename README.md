@@ -19,3 +19,6 @@
 
 12/13 구현내용
 1. 멀티테넌트에서 쿠키 세팅이 작동하지 않음 ( 해결필요 )
+   
+12/14
+1.Cookie subdomain tenant에서 적재 안되는 이슈 발견 localStorage로 변경 작업 filter 및 보안 작업 진행예정
