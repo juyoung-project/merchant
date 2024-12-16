@@ -32,7 +32,8 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await this.$sendRequest('POST','/api/sign-in', {email: this.email, password: this.password, });
+        const response = await this.$sendRequest('POST','/api/sign-in', {email: this.email, password: this.password });
+        console.log(response)
         localStorage.setItem("JWT-TOKEN", response.data.jwtToken)
         localStorage.setItem("RE-JWT-TOKEN", response.data.reJwtToken)
         this.$router.push('/main');

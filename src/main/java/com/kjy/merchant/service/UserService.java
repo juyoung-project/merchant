@@ -1,11 +1,14 @@
 package com.kjy.merchant.service;
 
 import com.kjy.merchant.common.Code;
+import com.kjy.merchant.common.JwtTokenProvider;
 import com.kjy.merchant.dto.MemberDto;
 import com.kjy.merchant.entity.Member;
 import com.kjy.merchant.exception.BizException;
 import com.kjy.merchant.repository.MemberRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
 
     public void signUp(MemberDto dto)  {
         // sign up :: >> email, pw, role, username
@@ -38,5 +44,4 @@ public class UserService {
     public Member getMemberByEmail(String email) {
        return memberRepository.findByEmail(email).orElseThrow(() -> new BizException(Code.ERROR, "해당계정이 존재하지 않습니다."));
     }
-
 }

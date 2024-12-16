@@ -25,9 +25,6 @@ import java.util.Arrays;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 	
-	private static final String JWT_COOKIE = "JWT-TOKEN";
-	private static final String JWT_REFRESH_COOKIE = "RE-JWT-TOKEN";
-	
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
 	
@@ -39,24 +36,24 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	        throws ServletException, IOException {
 
 	    String requestURI = request.getRequestURI();
-//	    String token = CookieUtils.getJwtFromRequest(request, JWT_COOKIE);
+	    String token = jwtTokenProvider.getJwtToken(request);
 	    
 	    if (isPermittedURL(requestURI)) {
 	        filterChain.doFilter(request, response);
 	        return;
 	    }
 
-//	    if (isValidToken(token)) {
-//	        authenticateUser(token, request);
-//	    } else {
-//	        token = CookieUtils.getJwtFromRequest(request, JWT_REFRESH_COOKIE);
-//
-//	        if (isValidToken(token)) {
-//	            authenticateUser(token, request);
-//	        } else {
-//	            throw new BizException(Code.TOKEN_EXPIRED, requestURI + " 토큰이 만료되었거나 올바르지 않는 토큰입니다.");
-//	        }
-//	    }
+		try {
+			if (isValidToken(token)) {
+				authenticateUser(token, request);
+			} else {
+				throw new BizException(Code.TOKEN_EXPIRED, "토큰이 만료되었거나 올바르지 않은 토큰입니다.");
+			}
+		} catch (BizException e) {
+			response.setStatus(801);
+			response.getWriter().write(e.getMessage());
+			return;
+		}
 	    
 	    filterChain.doFilter(request, response);
 	}
@@ -78,5 +75,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 	    SecurityContextHolder.getContext().setAuthentication(authentication);
 	}
+
+
 
 }

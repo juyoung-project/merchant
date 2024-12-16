@@ -6,6 +6,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -50,7 +51,21 @@ public class JwtTokenProvider {
                             .signWith(SignatureAlgorithm.HS512, secretKey)
                             .compact();
 	}
-    
+
+	public String refreshTokenCheck(HttpServletRequest request){
+		String refreshToken = this.getJwtToken(request);
+		String token = "";
+		if ( this.validateToken(refreshToken)) {
+			token = this.generateToken(
+					this.getEmailFromToken(refreshToken),
+					this.getRoleFromToken(refreshToken)
+			);
+		} else {
+			// 토큰 만료 페이지로 이동해서 다시 로그인하도록 유도
+		}
+
+		return token;
+	}
 	 // JWT 토큰에서 사용자 정보 추출
     public String getEmailFromToken(String token) {
         
@@ -80,5 +95,13 @@ public class JwtTokenProvider {
 			System.out.println("Invalid JWT token: " + e.getMessage());
 		}
 		return false;
+	}
+
+	public String getJwtToken(HttpServletRequest request) {
+		String bearerToken = request.getHeader("Authorization");
+		if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+			return bearerToken.substring(7);
+		}
+		return null;
 	}
 }

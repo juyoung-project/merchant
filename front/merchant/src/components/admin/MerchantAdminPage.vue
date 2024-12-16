@@ -135,7 +135,7 @@ export default {
       await axios.post('/api/create-merchant', data);
     },
     async readMerchant() {
-      await axios.post('/api/read-merchant', {});
+      await this.$sendRequest('POST','/api/read-merchant',{})
     }
   },
 };

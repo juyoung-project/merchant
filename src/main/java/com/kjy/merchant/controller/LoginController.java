@@ -56,4 +56,12 @@ public class LoginController {
         }
         return ResponsePojo.success(tokenMap, "로그인 성공");
     }
+
+    @PostMapping(value = "/api/refresh-token-check")
+    public ResponsePojo refreshTokenCheck(HttpServletRequest request, HttpServletResponse response ) {
+        String jwtToken = jwtTokenProvider.refreshTokenCheck(request);
+        Map<String, String> tokenMap = new HashMap<String, String>();
+        tokenMap.put("jwtToken", jwtToken);
+        return ResponsePojo.success(tokenMap,"토큰재발급");
+    }
 }
