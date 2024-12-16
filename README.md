@@ -22,3 +22,6 @@
    
 12/14
 1.Cookie subdomain tenant에서 적재 안되는 이슈 발견 localStorage로 변경 작업 filter 및 보안 작업 진행예정
+
+12.16
+1.CORS 오류가 지속적으로 발생 해결필요
