@@ -8,11 +8,14 @@ import com.kjy.merchant.entity.Member;
 import com.kjy.merchant.exception.BizException;
 import com.kjy.merchant.service.UserService;
 import com.kjy.merchant.util.CookieUtils;
+import com.kjy.merchant.util.MemberUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -43,7 +46,10 @@ public class LoginController {
         UsernamePasswordAuthenticationToken authenticationToken =  new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
         Map<String, String> tokenMap = new HashMap<String, String>();
         try {
-            authenticationManager.authenticate(authenticationToken);
+            Authentication authentication = authenticationManager.authenticate(authenticationToken);
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            System.out.println(MemberUtils.getCurrentMember());
             Member mem = userService.getMemberByEmail(dto.getEmail());
             String jwtToken = jwtTokenProvider.generateToken( mem.getEmail(), mem.getRole());
             String refreshToken = jwtTokenProvider.generateRefreshToken(mem.getEmail(), mem.getRole());

@@ -27,6 +27,8 @@ public class TenantIdentifierResolver implements CurrentTenantIdentifierResolver
             return DEFAULT_TENANT;
         } else {
             String serverName = request.getServerName();
+            System.out.println("===============================================");
+            System.out.println(serverName);
             return getSubdomain(serverName) != null ? getSubdomain(serverName) : DEFAULT_TENANT;
         }
 

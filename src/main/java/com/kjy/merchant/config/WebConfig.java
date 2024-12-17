@@ -16,9 +16,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-//                .allowedOriginPatterns("http://tenant3.merchant.com")
+                .allowedOriginPatterns("*") // 테스트용으로 모든 Origin 허용
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
-                .allowedHeaders("Authorization", "Content-Type") // 허용할 헤더 추가
+                .allowedHeaders("*")
                 .allowCredentials(true);
     }
 

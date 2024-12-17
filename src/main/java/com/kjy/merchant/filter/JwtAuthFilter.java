@@ -21,6 +21,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Enumeration;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -30,14 +31,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	
 	@Autowired
 	private UserDetailService userDetailService;
-	 
+
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 	        throws ServletException, IOException {
 
 	    String requestURI = request.getRequestURI();
 	    String token = jwtTokenProvider.getJwtToken(request);
-	    
+
 	    if (isPermittedURL(requestURI)) {
 	        filterChain.doFilter(request, response);
 	        return;
@@ -50,6 +51,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 				throw new BizException(Code.TOKEN_EXPIRED, "토큰이 만료되었거나 올바르지 않은 토큰입니다.");
 			}
 		} catch (BizException e) {
+			e.printStackTrace();
 			response.setStatus(801);
 			response.getWriter().write(e.getMessage());
 			return;

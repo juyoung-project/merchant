@@ -56,7 +56,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PermitUrl.PermitUrlList.getPermitURL()).permitAll() // 접근 허용 URL
                         .anyRequest().authenticated() // 나머지는 인증 필요
@@ -69,17 +69,5 @@ public class SecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://tenant3.merchant.com"); // 허용할 Origin
-        configuration.addAllowedMethod("*"); // 모든 HTTP 메서드 허용
-        configuration.addAllowedHeader("*"); // 모든 헤더 허용
-        configuration.setAllowCredentials(true); // 쿠키 인증 허용
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
 
 }

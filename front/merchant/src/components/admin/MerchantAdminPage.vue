@@ -70,7 +70,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 
 export default {
   name: 'MerchantAdminPage',
@@ -119,6 +118,7 @@ export default {
     goToDetail(storeId) {
       this.$router.push({ name: 'MerchantDetailPage', params: { id: storeId } });
     },
+    
     async createMerchant() {
       let data ={
         "address": "123 Main Street, Business District",
@@ -131,8 +131,7 @@ export default {
         "contractEndDate": "2027-12-31",
         "openDate": "2024-02-01"
       }
-
-      await axios.post('/api/create-merchant', data);
+      this.$sendRequest('POST', '/api/create-merchant', data);
     },
     async readMerchant() {
       await this.$sendRequest('POST','/api/read-merchant',{})
