@@ -47,9 +47,8 @@ public class LoginController {
         Map<String, String> tokenMap = new HashMap<String, String>();
         try {
             Authentication authentication = authenticationManager.authenticate(authenticationToken);
-
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            System.out.println(MemberUtils.getCurrentMember());
+
             Member mem = userService.getMemberByEmail(dto.getEmail());
             String jwtToken = jwtTokenProvider.generateToken( mem.getEmail(), mem.getRole());
             String refreshToken = jwtTokenProvider.generateRefreshToken(mem.getEmail(), mem.getRole());

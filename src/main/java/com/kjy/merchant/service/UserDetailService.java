@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserDetailService implements UserDetailsService {
@@ -18,7 +19,10 @@ public class UserDetailService implements UserDetailsService {
     private MemberRepository memberRepository;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        System.out.println("222222222222222222222222");
+        System.out.println(email);
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BizException(Code.ERROR, "해당계정이 존재하지 않습니다."));
         return User.withUsername(member.getEmail()).password(member.getPassword()).roles(member.getRole().name()).build();
     }

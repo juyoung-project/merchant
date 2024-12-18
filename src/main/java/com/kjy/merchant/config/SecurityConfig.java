@@ -2,6 +2,7 @@ package com.kjy.merchant.config;
 
 import com.kjy.merchant.common.PermitUrl;
 import com.kjy.merchant.filter.JwtAuthFilter;
+import com.kjy.merchant.filter.TenantFilter;
 import com.kjy.merchant.service.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +29,9 @@ public class SecurityConfig {
 
     @Autowired
     private JwtAuthFilter jwtAuthFilter;
+
+    @Autowired
+    private TenantFilter tenantFilter;
 
     @Autowired
     private UserDetailService userDetailService;
@@ -64,7 +68,8 @@ public class SecurityConfig {
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // 세션 비활성화
                 )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // JWT 필터 추가
+                .addFilterBefore(tenantFilter, UsernamePasswordAuthenticationFilter.class) // TenantFilter 먼저 실행
+                .addFilterAfter(jwtAuthFilter, TenantFilter.class); // Jw
 
         return http.build();
     }

@@ -1,42 +1,47 @@
-package com.kjy.merchant.interceptor;
+package com.kjy.merchant.filter;
 
 import com.kjy.merchant.entity.Tenant;
 import com.kjy.merchant.exception.TenantNotFoundException;
 import com.kjy.merchant.repository.TenantRepository;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.filter.OncePerRequestFilter;
+
+import java.io.IOException;
 
 @Component
-public class TenantAccessInterceptor implements HandlerInterceptor {
-
-    private static final String DEFAULT_TENANT = "public";
+public class TenantFilter extends OncePerRequestFilter {
 
     @Autowired
     private TenantRepository tenantRepository;
 
+    private static final String DEFAULT_TENANT = "public";
 
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
         // 서버 이름에서 서브도메인 추출
         String serverName = request.getServerName();
         String subdomain = extractSubdomain(serverName);
-
         if (subdomain == null || DEFAULT_TENANT.equals(subdomain)) {
-            return true;
+            filterChain.doFilter(request, response);
+            return;
         }
 
-        // 데이터베이스에서 테넌트 상태 확인
+        // 테넌트 확인
         Tenant tenant = tenantRepository.findByTenantName(subdomain).orElse(null);
-        System.out.println("1111111111111111111111111");
-        System.out.println(tenant.getTenantName());
         if (tenant == null || "INACTIVE".equals(tenant.getStatus())) {
-            throw new TenantNotFoundException("찾을수 없는 도메인 입니다");
+            throw new TenantNotFoundException("찾을 수 없는 도메인입니다.");
         }
-
-        return true; // 활성화된 테넌트인 경우 요청 계속 처리
+        System.out.println("333333333333333333333333");
+        System.out.println(tenant.getTenantName());
+        filterChain.doFilter(request, response); // 다음 필터로 전달
     }
 
     private String extractSubdomain(String host) {
