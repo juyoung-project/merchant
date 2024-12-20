@@ -22,9 +22,9 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowCredentials(true);
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        // 모든 요청에 대해 테넌트 상태 확인
-        registry.addInterceptor(tenantAccessInterceptor).addPathPatterns("/**");
-    }
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        // 모든 요청에 대해 테넌트 상태 확인
+//        registry.addInterceptor(tenantAccessInterceptor).addPathPatterns("/**");
+//    }
 }

@@ -36,6 +36,9 @@ public class SecurityConfig {
     @Autowired
     private UserDetailService userDetailService;
 
+    @Autowired
+    private CorsConfigurationSource corsConfigurationSource;
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -58,9 +61,10 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        System.out.println("시큐리티 작동");
         http
                 .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource))  // 이게 적용되어야 진짜 cors 설정이 완료된거임
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PermitUrl.PermitUrlList.getPermitURL()).permitAll() // 접근 허용 URL
                         .anyRequest().authenticated() // 나머지는 인증 필요

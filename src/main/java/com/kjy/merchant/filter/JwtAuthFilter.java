@@ -6,6 +6,7 @@ import com.kjy.merchant.common.PermitUrl;
 import com.kjy.merchant.common.Role;
 import com.kjy.merchant.exception.BizException;
 import com.kjy.merchant.service.UserDetailService;
+import com.kjy.merchant.tenant.TenantContext;
 import com.kjy.merchant.util.CookieUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
@@ -38,7 +40,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 	        throws ServletException, IOException {
 
-	    String requestURI = request.getRequestURI();
+
+
+		String requestURI = request.getRequestURI();
+		System.out.println("2222222222222222");
+		System.out.println("check :: > " + request.getHeader("Authorization"));
+		System.out.println("check2 :: > " + TenantContext.getCurrentTenant());
 	    String token = jwtTokenProvider.getJwtToken(request);
 
 	    if (isPermittedURL(requestURI)) {

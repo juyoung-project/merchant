@@ -19,8 +19,9 @@ public class TenantConnectionProvider implements MultiTenantConnectionProvider {
     @Override
     public Connection getConnection(Object schema) throws SQLException {
         Connection connection = dataSource.getConnection();
-        System.out.println("뭐로 연결 :: >" +schema);
-        connection.setSchema(String.valueOf(schema));
+        String tenantSchema = TenantContext.getCurrentTenant() != null ? TenantContext.getCurrentTenant() :  String.valueOf(schema);
+        System.out.println("뭐로 연결3333333333333 :: >" +tenantSchema);
+        connection.setSchema(String.valueOf(tenantSchema));
         return connection;
     }
 

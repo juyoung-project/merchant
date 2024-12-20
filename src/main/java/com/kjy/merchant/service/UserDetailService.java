@@ -21,7 +21,7 @@ public class UserDetailService implements UserDetailsService {
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        System.out.println("222222222222222222222222");
+        System.out.println("loadBYYY");
         System.out.println(email);
         Member member = memberRepository.findByEmail(email).orElseThrow(() -> new BizException(Code.ERROR, "해당계정이 존재하지 않습니다."));
         return User.withUsername(member.getEmail()).password(member.getPassword()).roles(member.getRole().name()).build();
