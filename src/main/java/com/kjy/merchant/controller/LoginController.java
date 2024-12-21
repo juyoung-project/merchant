@@ -55,7 +55,7 @@ public class LoginController {
 
             tokenMap.put("jwtToken", jwtToken);
             tokenMap.put("reJwtToken", refreshToken);
-
+            CookieUtils.addJwtTokenCookie(request, response, jwtToken);
         } catch (Exception e) {
             throw new BizException(Code.ERROR, "정보가 올바르지 않습니다.", e);
         }

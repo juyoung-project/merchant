@@ -20,7 +20,7 @@ public class TenantConnectionProvider implements MultiTenantConnectionProvider {
     public Connection getConnection(Object schema) throws SQLException {
         Connection connection = dataSource.getConnection();
         String tenantSchema = TenantContext.getCurrentTenant() != null ? TenantContext.getCurrentTenant() :  String.valueOf(schema);
-        System.out.println("뭐로 연결3333333333333 :: >" +tenantSchema);
+        System.out.println("tenant connect :: >" +tenantSchema);
         connection.setSchema(String.valueOf(tenantSchema));
         return connection;
     }

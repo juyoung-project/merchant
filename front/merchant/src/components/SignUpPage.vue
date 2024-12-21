@@ -13,7 +13,15 @@
           <input v-model="password" type="password" placeholder="비밀번호" required />
         </div>
         <div class="input-container">
-          <input v-model="contact" type="text" placeholder="연락처 (010-1234-5678)" required />
+          <input v-model="contact" type="text" placeholder="연락처 (010-1234-5678)"  />
+        </div>
+        <div class="input-container"> 
+          <select v-model="role" required> 
+            <option value="STAFF">가맹점주</option>
+            <option value="HQ_STAFF">본사직원</option>
+            <option value="HQ_ADMIN">본사관리자</option>
+            <option value="ADMIN">시스템관리자</option>
+          </select>
         </div>
         <button type="submit">회원가입</button>
       </form>
@@ -34,6 +42,7 @@ export default {
       name: '',
       password: '',
       contact: '',
+      role : '',
     };
   },
   methods: {
@@ -44,7 +53,7 @@ export default {
           username: this.name,
           password: this.password,
           contact: this.contact,
-          role: "STAFF"
+          role: this.role
         });
         alert('회원가입 성공!');
         this.$router.push('/login'); // 회원가입 후 로그인 페이지로 이동

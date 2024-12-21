@@ -43,8 +43,6 @@ public class TenantFilter extends OncePerRequestFilter {
         if (tenant == null || "INACTIVE".equals(tenant.getStatus())) {
             throw new TenantNotFoundException("찾을 수 없는 도메인입니다.");
         }
-        System.out.println("11111111111111111111");
-        System.out.println(tenant.getTenantName());
         TenantContext.setCurrentTenant(tenant.getTenantName());
 
         filterChain.doFilter(request, response); // 다음 필터로 전달

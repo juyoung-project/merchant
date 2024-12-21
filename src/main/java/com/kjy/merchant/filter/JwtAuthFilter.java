@@ -40,13 +40,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 	        throws ServletException, IOException {
 
-
-
 		String requestURI = request.getRequestURI();
-		System.out.println("2222222222222222");
-		System.out.println("check :: > " + request.getHeader("Authorization"));
-		System.out.println("check2 :: > " + TenantContext.getCurrentTenant());
 	    String token = jwtTokenProvider.getJwtToken(request);
+
+		if ( token == null ) {
+			token = CookieUtils.getJwtFromRequest(request, "token");
+		}
 
 	    if (isPermittedURL(requestURI)) {
 	        filterChain.doFilter(request, response);
@@ -60,7 +59,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 				throw new BizException(Code.TOKEN_EXPIRED, "토큰이 만료되었거나 올바르지 않은 토큰입니다.");
 			}
 		} catch (BizException e) {
-			e.printStackTrace();
 			response.setStatus(801);
 			response.getWriter().write(e.getMessage());
 			return;
@@ -71,7 +69,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 	private boolean isPermittedURL(String requestURI) {
 	    return Arrays.stream(PermitUrl.PermitUrlList.getPermitURL())
-	                 .anyMatch(str -> str.contains(requestURI));
+	                 .anyMatch(str -> str.equals(requestURI));
 	}
 
 	private boolean isValidToken(String token) {
@@ -81,6 +79,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	private void authenticateUser(String token, HttpServletRequest request) {
 	    String email = jwtTokenProvider.getEmailFromToken(token);
 	    UserDetails userDetails = userDetailService.loadUserByUsername(email);
+		System.out.println( "권한체크 : >> " +  userDetails.getAuthorities());
 	    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
 	            userDetails, null, userDetails.getAuthorities());
 	    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
