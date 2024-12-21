@@ -37,3 +37,8 @@
 12.19 
 1.cors 설정 점검 cors(cors -> cors.configurationSource(corsConfigurationSource)) 이게 적용되어야 진짜 cors 설정이 완료된거임 
 2. db 호출전 TenantContext에 tenant적재하여 원하는 스키마.tabled로 접근하도록 수정
+
+12.20
+1. HikariCP 적용
+2. ADMIN ROLE 체크 추가
+3. 쿠키 사용으로 TOKEN 안정성 보장 추가
