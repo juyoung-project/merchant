@@ -32,3 +32,8 @@
 12/18 오류원인 파악
 1. 멀티테넌트 기반이라 해당 하는 스키마를 호출해야하는데 설정 오류로 인해 항상 PUBLIC스키마를 호출
 2. 설정 변경을 통해 현재 URL.으로 접근되도록 수정
+
+
+12.19 
+1.cors 설정 점검 cors(cors -> cors.configurationSource(corsConfigurationSource)) 이게 적용되어야 진짜 cors 설정이 완료된거임 
+2. db 호출전 TenantContext에 tenant적재하여 원하는 스키마.tabled로 접근하도록 수정
