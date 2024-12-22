@@ -32,8 +32,8 @@
 ## 프로젝트 로컬 설정 방법
 1. 프로젝트 클론 ( https://github.com/juyoung-project/merchant.git )
 2. gradle lib 설치
-3. application.properties 설정
-4. DB테이블 설정
+3. application.properties 설정 ( https://spiffy-forger-b6c.notion.site/164a1a57086a8031ae37d608b70955db ) 
+4. DB테이블 설정 ( https://spiffy-forger-b6c.notion.site/164a1a57086a8031ae37d608b70955db ) 
 5. host파일 수정 ( 현재 *.merchant.com:8080 으로 설정 )
 6. front/merchant 폴더 내부에서 npm install 진행 ( node.js v22.11.0 사용 )
 7. 프론트서버 실행 npm run serve
