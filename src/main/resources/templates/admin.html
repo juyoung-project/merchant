@@ -96,6 +96,35 @@
 <div class="container">
   <h1>테넌트 관리자 페이지</h1>
 
+  <!-- 엑셀 업로드 -->
+  <div>
+    <h2>엑셀 업로드</h2>
+    <div class="form-group">
+      <label for="excel-upload">엑셀 파일</label>
+      <input type="file" id="excel-upload" accept=".xlsx, .xls">
+    </div>
+    <div class="form-group">
+      <label for="drm-type">업로드 유형</label>
+      <select id="drm-type">
+        <option value="fasso">Fasso</option>
+        <option value="softcamp">소프트캠프</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="tenant-type">테넌트 타입</label>
+      <select id="tenant-type">
+        <option value="test">test</option>
+      </select>
+    </div>
+    <a class="btn" onclick="uploadExcel()">엑셀 업로드</a>
+  </div>
+
+  <!-- 엑셀 다운로드 -->
+  <div>
+    <h2>엑셀 다운로드</h2>
+    <a class="btn" onclick="downloadExcel()">엑셀 다운로드</a>
+  </div>
+
   <!-- 테넌트 생성 -->
   <div>
     <h2>테넌트 생성</h2>
@@ -244,6 +273,67 @@
             alert('에러 발생: ' + error);
         });
     }
+     // 엑셀 업로드
+  function uploadExcel() {
+      const fileInput = document.getElementById('excel-upload');
+      const drmType = document.getElementById('drm-type').value;
+      const tenantType = document.getElementById('tenant-type').value;
+      const file = fileInput.files[0];
+
+      if (!file) {
+          alert('업로드할 엑셀 파일을 선택하세요.');
+          return;
+      }
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('tenantType', tenantType);
+      formData.append('drmType', drmType);
+
+      fetch('/api/upload-excel-migration-member', {
+          method: 'POST',
+          body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              alert('엑셀 업로드 성공!');
+              getTenantList();
+          } else {
+              alert('엑셀 업로드 실패: ' + data.message);
+          }
+      })
+      .catch(error => {
+          alert('에러 발생: ' + error);
+      });
+  }
+
+  // 엑셀 다운로드
+  function downloadExcel() {
+      fetch('/api/download-excel', {
+          method: 'GET'
+      })
+      .then(response => {
+          if (response.ok) {
+              return response.blob();
+          } else {
+              throw new Error('엑셀 다운로드 실패');
+          }
+      })
+      .then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'tenants.xlsx';
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          window.URL.revokeObjectURL(url);
+      })
+      .catch(error => {
+          alert('에러 발생: ' + error.message);
+      });
+  }
   </script>
 </body>
 </html>

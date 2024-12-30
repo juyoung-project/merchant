@@ -16,7 +16,10 @@ public class CommonExceptionHandler {
         model.addAttribute("errorMessage", ex.getMessage());
         return "error_404";
     }
-    
-    // BizException은 추후 프론트단에서 alert경고창으로 조절
 
+    // BizException은 추후 프론트단에서 alert경고창으로 조절
+    @ExceptionHandler(Exception.class)
+    public void handleGenericException(Exception e){
+        e.printStackTrace();
+    }
 }
